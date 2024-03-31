@@ -1,11 +1,13 @@
 import GetTableData from './components/GetTableData'
+import Navigation from './components/Navigation'
 
 function App() {
   
 
   return (
       <>
-          <GetTableData/>
+        <Navigation/>
+        <GetTableData/>
       </>
   )
 }
