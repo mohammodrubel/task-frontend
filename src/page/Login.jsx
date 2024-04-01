@@ -17,8 +17,9 @@ function Login() {
     try {
       const res = await login(data).unwrap();
       const info = await DecodeToken(res?.data?.data?.accessToken);
+      toast.success(res?.data?.data?.messege);
       dispatch(setUser({ user: info, token: res?.data?.data?.accessToken }));
-      toast.success(res?.data?.messege);
+      
     } catch (error) {
       toast.error(error?.data?.message);
     }
