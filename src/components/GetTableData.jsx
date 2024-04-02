@@ -8,13 +8,20 @@ import UpdateProductModel from './Modal/UpdateProductModel';
 
 
 function GetTableData() {
-  const {isLoading,isError,data:getAllProductData} = useGetAllProductQuery()
-  const [params, setParams] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(1);
-  
-  const data = getAllProductData?.data?.data
+  const [params,setParams]=useState([])
+  const [inputData,setInputData]=useState('')
+  const [limit,setLimit]=useState(5)
+  const [page,setPage]=useState(1)
+  const {isLoading,isError,data:getAllProductData} = useGetAllProductQuery([
+    { name: 'searchTerm', value: inputData },
+    { name: 'limit', value: limit },
+    { name: 'page', value: page },
+    ...params
+  ])
+  const tableData = getAllProductData?.data?.data?.result
+  const meta = getAllProductData?.data?.data?.metaData
+  const data = tableData
+
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
@@ -66,12 +73,14 @@ function GetTableData() {
     <div className='container mx-auto'>
       <CreateProductModal/>
       <Table 
+      loading={isLoading}
         columns={columnsData} 
         dataSource={data} 
         onChange={onChange} 
         scroll={{ x: true }} 
         pagination={false}
       />
+      <div className='mt-10'><Pagination onChange={(value)=>setPage(value)} pageSize={limit} defaultCurrent={1} total={meta?.TotalCount} /></div>
     </div>
   );
 }

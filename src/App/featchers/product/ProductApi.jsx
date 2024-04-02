@@ -3,10 +3,19 @@ import baseApi from "../../api/baseApi";
 const productApi = baseApi.injectEndpoints({
     endpoints:(builder)=>({
         getAllProduct:builder.query({
-            query:()=>({
-                url:'/product',
-                method:"GET"
-            }),
+            query:(args)=>{
+                const params = new URLSearchParams()
+                    if(args){
+                        args.forEach((item)=>{
+                            params.append(item.name,item.value)
+                        })
+                    }
+                return{
+                    url:'/product',
+                    method:"GET",
+                    params:params
+                }
+            },
             providesTags: ["product"],
         }),
         createProduct:builder.mutation({
