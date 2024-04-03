@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
-import { useGetAllUsersQuery } from '../App/featchers/auth/authApi';
+import { useDeleteUsersMutation, useGetAllUsersQuery } from '../App/featchers/auth/authApi';
 import { Table, Button } from 'antd';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { Toaster, toast } from "sonner";
+
 
 function UserData() {
+  const [deleteData] = useDeleteUsersMutation()
   const { isLoading, isError, data } = useGetAllUsersQuery();
+  
+  
+const handelDelete = async(item)=>{
+  try{
+    const res = await  deleteData(item)
+  toast.success(res?.data?.data?.messege);
+  }catch(error){
+    toast.error(error?.data?.message);
+  }
+}
 
   if (isLoading) {
     return <Loading />;
@@ -24,29 +37,26 @@ function UserData() {
 
   const columns = [
     {
+      title: 'name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
     {
       title: 'Role',
-      dataIndex: 'role',
       key: 'role',
-    },
-    {
-      title: 'Deleted Users',
-      dataIndex: 'isDeleted',
-      key: 'isDeleted',
-      render: (isDeleted) => (
-        <Button type="primary">{isDeleted ? 'Deleted User' : 'Active'}</Button>
-      ),
+      render:(item)=> <Button type={item.role === 'User' ? 'dashed' : 'primary'}>{item.role}</Button>
     },
     {
       title: 'Action',
       key: 'action',
       render: (item) => (
-        <Button type="primary">
-          {item?.role === 'User' ? 'Convert to Admin' : 'Convert to User'}
+        <Button type="primary" onClick={()=>handelDelete(item._id)}>
+          Delete User
         </Button>
       ),
     },
@@ -56,8 +66,9 @@ function UserData() {
     <>
       <Navigation />
       <div className="container mx-auto">
-        <Table pagination={false} scroll={{ x: true }}  dataSource={dataSource} columns={columns} responsive />
+        <Table pagination={false} scroll={{ x: true }}  dataSource={dataSource} columns={columns}  />
       </div>
+      <Toaster richColors position="top-right" />
     </>
   );
 }

@@ -29,7 +29,7 @@ function CreateProductModal() {
 
   return (
     <>
-      <Button type="primary" className="my-10" onClick={showModal}>
+      <Button type="primary"  onClick={showModal}>
         Create New Product
       </Button>
       <Modal

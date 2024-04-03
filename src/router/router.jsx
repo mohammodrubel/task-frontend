@@ -4,12 +4,13 @@ import Login from "../page/Login";
 import Register from "../page/Register";
 import UserData from "../page/UserData";
 import RequiredRoute from "./RequiredRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter(
     [
         {
             path:"/",
-            element:<App/>,
+            element:<ProtectedRoute><App/></ProtectedRoute>,
         },
         {
             path:'/login',

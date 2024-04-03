@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import {logout, setUser} from '../featchers/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
-    baseUrl:'http://localhost:9000/api/v1',
+    baseUrl:'https://authintication-backend.vercel.app',
     credentials:'include',
     prepareHeaders:(headers,{getState})=>{
         const token = getState().auth.token
@@ -18,7 +18,7 @@ const customBaseQuery = async(args,api,extraOptions)=>{
         if(result?.error?.status === 401){
             console.log('sending refresh token')
             // send refresh token 
-            const res = await fetch(`http://localhost:9000/api/v1/auth/refresh-token`,{
+            const res = await fetch(`https://authintication-backend.vercel.app/auth/refresh-token`,{
                 method:"POST",
                 credentials: 'include',
             })
